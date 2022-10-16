@@ -33,9 +33,9 @@ function [XS,X,XBS,XB,STM,tf,rkj,vkj,X0I,XBS2,r122,rkj2,vkj2] = qpoeph(PHI0,X0I,
 %
 % Reference:
 %
-% Mascolo, Luigi. Mathematical Methods and Algorithms for Space Trajectory 
-% Optimization, unpublished doctoral dissertation as of 15 Oct 2022, 
-% Politecnico di Torino. 
+% Mascolo, Luigi. Mathematical Methods and Algorithms for Space Trajectory
+% Optimization, unpublished doctoral dissertation as of 15 Oct 2022,
+% Politecnico di Torino.
 %
 % https://github.com/Luigi-Mascolo/Quasi-periodic-orbit-generator
 
@@ -174,21 +174,14 @@ while fl
         X0S = [X0S; tf];
     end
     
-    if scl2 == 2 && fleph
-        [rkj2,vkj2,~] = geteph(mode,et0,tf,str,ndim,IDS,bd,sb,NE,t00,conv);
-        rkj2 = rkj2./rconvlag;
-        vkj2 = vkj2./vconvlag;
-        r122 = [rkj2((cb-1)*3+1:cb*3,:).*rconvlag; vkj2((cb-1)*3+1:cb*3,:).*vconvlag];
-        XB2 = [rkj((cb-1)*3+1:cb*3,:); vkj((cb-1)*3+1:cb*3,:)];
-        XBS2 = j20002rot(XB2,r122,mustar,rconvlag,vconvlag,sys);
-        X0BS2 = XBS(:,1);
-        XFBS2 = XBS(:,end);
-        if any(contains(varyX0,'t'))
-        	fleph = true;
-        else
-            fleph = false;
-        end
-    end
+    [rkj2,vkj2,~] = geteph(mode,et0,tf,str,ndim,IDS,bd,sb,NE,t00,conv);
+    rkj2 = rkj2./rconvlag;
+    vkj2 = vkj2./vconvlag;
+    r122 = [rkj2((cb-1)*3+1:cb*3,:).*rconvlag; vkj2((cb-1)*3+1:cb*3,:).*vconvlag];
+    XB2 = [rkj((cb-1)*3+1:cb*3,:); vkj((cb-1)*3+1:cb*3,:)];
+    XBS2 = j20002rot(XB2,r122,mustar,rconvlag,vconvlag,sys);
+    X0BS2 = XBS(:,1);
+    XFBS2 = XBS(:,end);
     
     for k = 1:numel(checkXF)
         if strcmp(checkXF{k},'x')
@@ -215,15 +208,6 @@ while fl
         vkj = vkj./vconvlag;
         X0S = X0S(1:6);
     end
-    
-    %     if iter>200 && numel(checkXF) == 1
-    %         checkXF = {'x','y'};
-    % %         checkXF = {'y','vx'};
-    %         desXF = zeros(size(checkXF));
-    %         desXF(1) = X0S(1);
-    % %         desXF(3) = X0S(4);
-    %         ril = 1e-4;
-    %     end
     
     err = norm(DXF);
     if iter == 1, errold = err;
@@ -259,48 +243,48 @@ while fl
     end
     
     if flv
-    if scl2 == 1, subplot(1,2,1); end
-    %     if scl2 == 1 && (mod(iter,200) == 0 || iter == 1)
-    if (flag.locvid) || (~fl && ~flag.locvid)
-        ix = flag.iterplot;
-        mk = lt{ix};
-        mk = mk(end-1:end);
-        if scl2 == 1 
-            subplot(1,2,1); 
-            hp1 = plot3(xs,ys,zs,lt{ix},'markerindices',1:round(numel(xs)/10):numel(xs),'markersize',6);
-            hpp1 = plot3(xs(1),ys(1),zs(1),mk,'color','g','markersize',7);
-            hpp1e = plot3(xs(end),ys(end),zs(end),mk,'color','r','markersize',7);
-            subplot(1,2,2)
-            hp2 = plot3(xs-XBS(1,:),ys,zs,lt{ix},'markerindices',1:round(numel(xs)/10):numel(xs),'markersize',6);
-            hpp2 = plot3(xs(1)-XBS(1,1),ys(1),zs(1),mk,'color','g','markersize',7);
-            hpp2e = plot3(xs(end)-XBS(1,end),ys(end),zs(end),mk,'color','r','markersize',7);
-        else
-            hp2 = plot3(xs-XBS2(1,:),ys,zs,lt{ix},'markerindices',1:round(numel(xs)/10):numel(xs),'markersize',6);
-            hpp2 = plot3(xs(1)-XBS2(1,1),ys(1),zs(1),mk,'color','g','markersize',7);
-            hpp2e = plot3(xs(end)-XBS2(1,end),ys(end),zs(end),mk,'color','r','markersize',7);
-        end
-        pause(1e-2)
-        
-        if scl2 == 1, delete(hp1); delete(hpp1); delete(hpp1e); end
-        delete(hp2); delete(hpp2); delete(hpp2e);
-    end
-    
-    if ~fl && flag.fig && ~flag.tcor
-        if abs(stage/parameph.stage*100)<1e-6 || abs(stage/parameph.stage*100)==50 || abs(stage/parameph.stage*100)== 100
+        if scl2 == 1, subplot(1,2,1); end
+        %     if scl2 == 1 && (mod(iter,200) == 0 || iter == 1)
+        if (flag.locvid) || (~fl && ~flag.locvid)
             ix = flag.iterplot;
+            mk = lt{ix};
+            mk = mk(end-1:end);
             if scl2 == 1
-                subplot(1,2,1)
-                hp = plot3(xs,ys,zs,lt{ix},'markerindices',1:round(numel(xs)/10):numel(xs),'markersize',6);
-                hp.Color(4) = cll;
+                subplot(1,2,1);
+                hp1 = plot3(xs,ys,zs,lt{ix},'markerindices',1:round(numel(xs)/10):numel(xs),'markersize',6);
+                hpp1 = plot3(xs(1),ys(1),zs(1),mk,'color','g','markersize',7);
+                hpp1e = plot3(xs(end),ys(end),zs(end),mk,'color','r','markersize',7);
                 subplot(1,2,2)
-                hp = plot3(xs-XBS(1,:),ys,zs,lt{ix},'markerindices',1:round(numel(xs)/10):numel(xs),'markersize',6);
-            else 
-                hp = plot3(xs-XBS2(1,:),ys,zs,lt{ix},'markerindices',1:round(numel(xs)/10):numel(xs),'markersize',6);
+                hp2 = plot3(xs-XBS(1,:),ys,zs,lt{ix},'markerindices',1:round(numel(xs)/10):numel(xs),'markersize',6);
+                hpp2 = plot3(xs(1)-XBS(1,1),ys(1),zs(1),mk,'color','g','markersize',7);
+                hpp2e = plot3(xs(end)-XBS(1,end),ys(end),zs(end),mk,'color','r','markersize',7);
+            else
+                hp2 = plot3(xs-XBS2(1,:),ys,zs,lt{ix},'markerindices',1:round(numel(xs)/10):numel(xs),'markersize',6);
+                hpp2 = plot3(xs(1)-XBS2(1,1),ys(1),zs(1),mk,'color','g','markersize',7);
+                hpp2e = plot3(xs(end)-XBS2(1,end),ys(end),zs(end),mk,'color','r','markersize',7);
             end
-            hp.Color(4) = cll;
+            pause(1e-2)
+            
+            if scl2 == 1, delete(hp1); delete(hpp1); delete(hpp1e); end
+            delete(hp2); delete(hpp2); delete(hpp2e);
         end
-        pause(1e-2)
-    end
+        
+        if ~fl && flag.fig && ~flag.tcor
+            if abs(stage/parameph.stage*100)<1e-6 || abs(stage/parameph.stage*100)==50 || abs(stage/parameph.stage*100)== 100
+                ix = flag.iterplot;
+                if scl2 == 1
+                    subplot(1,2,1)
+                    hp = plot3(xs,ys,zs,lt{ix},'markerindices',1:round(numel(xs)/10):numel(xs),'markersize',6);
+                    hp.Color(4) = cll;
+                    subplot(1,2,2)
+                    hp = plot3(xs-XBS(1,:),ys,zs,lt{ix},'markerindices',1:round(numel(xs)/10):numel(xs),'markersize',6);
+                else
+                    hp = plot3(xs-XBS2(1,:),ys,zs,lt{ix},'markerindices',1:round(numel(xs)/10):numel(xs),'markersize',6);
+                end
+                hp.Color(4) = cll;
+            end
+            pause(1e-2)
+        end
     end
     if type == 1
         strtype = 'CR3BP Lyap: ';
