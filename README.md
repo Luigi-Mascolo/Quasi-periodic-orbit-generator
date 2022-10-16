@@ -1,5 +1,7 @@
 # Quasi-periodic-orbit-generator
 
+*This repository contains the code relative to the article Optimal Escape from Sun-Earth and Earth-Moon L2 with Electric Propulsion (doi: https://doi.org/10.3390/aerospace9040186) and to my (still unpublished) PhD thesis. Please cite Optimal Escape from Sun-Earth and Earth-Moon L2 with Electric Propulsion when referring to this repository.*
+
 This code comes from a regroup of my efforts to automate the search of Quasi-Periodic Orbits in higher fidelity models during my PhD. 
 It is based on different codes and inherited some expertise from previous efforts at the Politecnico di Torino (in FORTRAN).
 It mixes a great part of Matlab computations and a single executable file compiled in FORTRAN (to protect its intellectual property). 
